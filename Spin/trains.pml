@@ -29,8 +29,7 @@ inline disconnectOneCar_T(trainID, loc, dir, pos) {
 	fi
 
 	/* trainsCarsStacks_idx_1 - the index where contains the car type at the end of stack (first car in the head || last car in the tail) */
-	/* was int */
-	byte trainsCarsStacks_idx_1 = trainID * MAX_CARS_FOR_ONE_TRAIN + pos * MAX_CARS_IN_ONE_SIDE + trainsCarsNum[trainID * 2 + pos] - 1;
+	int trainsCarsStacks_idx_1 = trainID * MAX_CARS_FOR_ONE_TRAIN + pos * MAX_CARS_IN_ONE_SIDE + trainsCarsNum[trainID * 2 + pos] - 1;
 
 	/* was byte */
 	byte carType_1 = trainsCarsStacks[trainsCarsStacks_idx_1];
@@ -38,22 +37,21 @@ inline disconnectOneCar_T(trainID, loc, dir, pos) {
 	byte newCarsNumInLoc_1 = carsInLocs[loc * 2 + dir] + 1;
 
 	/* carsLocsStacks_idx_1[1600] - the index where car will be left on the railway */
-	/* was int */
-	byte carsLocsStacks_idx_1 = loc * MAX_CARS_FOR_ONE_TRAIN + dir * MAX_CARS_IN_ONE_SIDE + newCarsNumInLoc_1 - 1;
+	int carsLocsStacks_idx_1 = loc * MAX_CARS_FOR_ONE_TRAIN + dir * MAX_CARS_IN_ONE_SIDE + newCarsNumInLoc_1 - 1;
 
-        trainsCarsNum[trainID * 2 + pos] = trainsCarsNum[trainID * 2 + pos] - 1;
-        trainsCarsStacks[trainsCarsStacks_idx_1] = 0;
-        
-        carsInLocs[loc * 2 + dir] = newCarsNumInLoc_1;
-        carsLocsStacks[carsLocsStacks_idx_1] = carType_1;
+	trainsCarsNum[trainID * 2 + pos] = trainsCarsNum[trainID * 2 + pos] - 1;
+	trainsCarsStacks[trainsCarsStacks_idx_1] = 0;
+	
+	carsInLocs[loc * 2 + dir] = newCarsNumInLoc_1;
+	carsLocsStacks[carsLocsStacks_idx_1] = carType_1;
 
-        if
-        :: IS_MSG_ENABLE -> printf("\nTrain-%d disconnected 1 car (loc = %d; dir = %d; pos = %d; car type = %d; behind = %d; ahead = %d; trainsPos = %d)\n", 
-        	trainID + 1, loc, dir, pos, carType_1, trainsCarsNum[trainID * 2], trainsCarsNum[trainID * 2 + 1], trainsPos[trainID]);
-        :: else
-        fi
+	if
+	:: IS_MSG_ENABLE -> printf("\nTrain-%d disconnected 1 car (loc = %d; dir = %d; pos = %d; car type = %d; behind = %d; ahead = %d; trainsPos = %d)\n", 
+		trainID + 1, loc, dir, pos, carType_1, trainsCarsNum[trainID * 2], trainsCarsNum[trainID * 2 + 1], trainsPos[trainID]);
+	:: else
+	fi
 
-        assert(carType_1 == 1 || carType_1 == 2);
+	assert(carType_1 == 1 || carType_1 == 2);
 }
 
 inline connectOneCar_T(trainID, loc, dir, pos, isReverse) {
@@ -62,22 +60,20 @@ inline connectOneCar_T(trainID, loc, dir, pos, isReverse) {
 	if
 	:: IS_MSG_ENABLE -> printf("Train-%d starting connection (loc = %d; dir = %d; pos = %d; behind = %d; ahead = %d)\n", 
 		trainID + 1, loc, dir_crt, pos, trainsCarsNum[trainID * 2], trainsCarsNum[trainID * 2 + 1]);
-        :: else
-        fi
+	:: else
+	fi
 
-        /* was byte */
+	/* was byte */
 	byte carType_2;
-        /* was int */
+	/* was int */
 	byte oldCarsNumInLoc_1 = carsInLocs[loc * 2 + dir_crt];
 
-        /* was int */
-	int tmp = loc * MAX_CARS_FOR_ONE_TRAIN + dir_crt * MAX_CARS_IN_ONE_SIDE;
 	/* was int */
-	byte carsLocsStacks_idx_2 = tmp + oldCarsNumInLoc_1 - 1;
+	int tmp = loc * MAX_CARS_FOR_ONE_TRAIN + dir_crt * MAX_CARS_IN_ONE_SIDE;
+	int carsLocsStacks_idx_2 = tmp + oldCarsNumInLoc_1 - 1;
 
 	/* trainsCarsStacks_idx_2 - the index where car will be added to the train */
-	/* was int */
-	byte trainsCarsStacks_idx_2 = trainID * MAX_CARS_FOR_ONE_TRAIN + pos * MAX_CARS_IN_ONE_SIDE + trainsCarsNum[trainID * 2 + pos];
+	int trainsCarsStacks_idx_2 = trainID * MAX_CARS_FOR_ONE_TRAIN + pos * MAX_CARS_IN_ONE_SIDE + trainsCarsNum[trainID * 2 + pos];
 
 	carsInLocs[loc * 2 + dir_crt] = oldCarsNumInLoc_1 - 1;
 
@@ -85,7 +81,7 @@ inline connectOneCar_T(trainID, loc, dir, pos, isReverse) {
 	:: isReverse -> { 
 		carType_2 = carsLocsStacks[tmp];
 		/* was int */
-		byte k = 1;
+		int k = 1;
 		do
 		:: if 
 		   :: k < oldCarsNumInLoc_1 -> {
@@ -121,7 +117,7 @@ inline connectOneCar_T(trainID, loc, dir, pos, isReverse) {
 
 inline disconnectCars_U(trainID, loc, dir, pos, m) {
 	/* was int */
-	byte i_dc = 0;
+	int i_dc = 0;
 	do
 	:: i_dc < m -> {
 		disconnectOneCar_T(trainID, loc, dir, pos);
@@ -133,7 +129,7 @@ inline disconnectCars_U(trainID, loc, dir, pos, m) {
 
 inline connectCars_U(trainID, loc, dir, pos, m, isReverse) {
 	/* was int */
-	byte i_cc = 0;
+	int i_cc = 0;
 	do
 	:: i_cc < m -> {
 		connectOneCar_T(trainID, loc, dir, pos, isReverse);
@@ -176,36 +172,36 @@ inline doSpecialConnection(trainID, dir, n_doSpecialConnection) {
         (trainsLocs[trainID] + dir_conv(dir) == 2 && trainsLocs[1 - trainID] != trainsLocs[trainID] + 2 * dir_conv(dir)))
 
 inline doOneStepMove(trainID, dir) {
-        assert(dir == 0 || dir == 1);
+	assert(dir == 0 || dir == 1);
 
 	/* was int */
 	short oldLoc = trainsLocs[trainID];
 	int dir_tmp = dir_conv(dir);
 
-        assert((oldLoc + dir_tmp >= 0 && oldLoc + dir_tmp <= 4) &&
-             ((oldLoc + dir_tmp != 2 && trainsLocs[1 - trainID] != oldLoc + dir_tmp) ||
-             (oldLoc + dir_tmp == 2 && trainsLocs[1 - trainID] != oldLoc + 2 * dir_tmp))
-        );
+	assert((oldLoc + dir_tmp >= 0 && oldLoc + dir_tmp <= 4) &&
+		 ((oldLoc + dir_tmp != 2 && trainsLocs[1 - trainID] != oldLoc + dir_tmp) ||
+		 (oldLoc + dir_tmp == 2 && trainsLocs[1 - trainID] != oldLoc + 2 * dir_tmp))
+	);
 
 
-        /* was int */
+	/* was int */
 	short newLoc;
-        if
-        :: oldLoc + dir_tmp != 2 ->  {
-                  newLoc = oldLoc + dir_tmp;
-           }
-        :: else ->  { newLoc = oldLoc + 2 * dir_tmp }
-        fi
+	if
+	:: oldLoc + dir_tmp != 2 ->  {
+			  newLoc = oldLoc + dir_tmp;
+	   }
+	:: else ->  { newLoc = oldLoc + 2 * dir_tmp }
+	fi
 
-        /* was bit */
-        byte dir_m = dir;
-        /* was bit */
-        byte pos_m = calcTrainPosByDir(trainID, dir_m);
+	/* was bit */
+	byte dir_m = dir;
+	/* was bit */
+	byte pos_m = calcTrainPosByDir(trainID, dir_m);
 
-        if
-        :: IS_MSG_ENABLE -> printf("Train-%d start moving from the loc-%d to the loc-%d (dir = %d; trainPos = %d)\n[[[\n", trainID + 1, oldLoc, newLoc, dir_m, trainsPos[trainID]);
-        :: else
-        fi
+	if
+	:: IS_MSG_ENABLE -> printf("Train-%d start moving from the loc-%d to the loc-%d (dir = %d; trainPos = %d)\n[[[\n", trainID + 1, oldLoc, newLoc, dir_m, trainsPos[trainID]);
+	:: else
+	fi
 
 	/*printf("[!] Loc-%d | car on the left = %d | cars on the right = %d\n", oldLoc, carsInLocs[oldLoc * 2], carsInLocs[oldLoc * 2 + 1]);*/
 
@@ -256,23 +252,23 @@ inline doStepsMove(trainID, dir) {
 inline moveToDeadend(trainID) {
 	assert(canMoveToDeadend(trainID));
 
-        if
-        :: IS_MSG_ENABLE -> printf("\nTrain-%d start moving to deadend (loc = %d; ahead = %d, behind = %d)\n[[[\n",
+    if
+    :: IS_MSG_ENABLE -> printf("\nTrain-%d start moving to deadend (loc = %d; ahead = %d, behind = %d)\n[[[\n",
 		trainID + 1, trainsLocs[trainID], trainsCarsNum[trainID * 2 + 1], trainsCarsNum[trainID * 2]);
 	:: else
 	fi
 
-        short oldLoc_td = trainsLocs[trainID];
-        short newLoc_td = 2;
-        /* was bit */
-        byte dir_td;
-        if
-        :: (oldLoc_td == 1) ->  { dir_td = 1; }
-        :: else ->  { dir_td = 0; }
-        fi
+	short oldLoc_td = trainsLocs[trainID];
+	short newLoc_td = 2;
+	/* was bit */
+	byte dir_td;
+	if
+	:: (oldLoc_td == 1) ->  { dir_td = 1; }
+	:: else ->  { dir_td = 0; }
+	fi
 
-        /* was bit */
-        byte pos_td = calcTrainPosByDir(trainID, dir_td);
+	/* was bit */
+	byte pos_td = calcTrainPosByDir(trainID, dir_td);
 
 	byte n_td = carsInLocs[oldLoc_td * 2 + dir_td];
 	if
@@ -344,9 +340,9 @@ inline moveFromDeadend(trainID, dir) {
 	fi
 
 	short oldLoc_fd = 2;
-        short newLoc_fd = 2 + (dir == 0 -> -1 : 1);
-        byte dir_fd = dir;
-        /* was bit */
+	short newLoc_fd = 2 + (dir == 0 -> -1 : 1);
+	byte dir_fd = dir;
+	/* was bit */
 	byte pos_fd;
 	if
 	:: trainsPos[trainID] == 1 && dir_fd == 0 -> { pos_fd = 1; trainsPos[trainID] = 1; }
@@ -396,16 +392,16 @@ bool isTrainFixed[2] = {false, false};
 bool isCarsInTheirPosBoolArr[2] = {true, true};
 
 inline printCarsLocsStacks() {
-	byte i_p = 0;
+	int i_p = 0;
 	do
 	:: i_p < 5 -> {
-		byte j_p = 0;
+		int j_p = 0;
 		do
 		:: j_p < 2 -> {
-			byte k_p = 0;
+			int k_p = 0;
 			do
 			:: k_p < MAX_CARS_IN_ONE_SIDE -> {
-				byte idx = i_p * MAX_CARS_FOR_ONE_TRAIN + j_p * MAX_CARS_IN_ONE_SIDE + k_p;
+				int idx = i_p * MAX_CARS_FOR_ONE_TRAIN + j_p * MAX_CARS_IN_ONE_SIDE + k_p;
 				printf("%d:%d ", idx, carsLocsStacks[idx]);
 				k_p = k_p + 1;
 			   }
@@ -430,7 +426,7 @@ inline isCarsInTheirPos(trainID) {
 	:: else
 	fi
 
-	byte j_c = 0;
+	int j_c = 0;
 	do
 	:: j_c < INIT_CARS_FOR_ONE_TRAIN -> {
 		if
@@ -452,7 +448,7 @@ inline isAllCarsInTheirPos() {
 	isCarsInTheirPos(0);
 	isCarsInTheirPos(1);
 	
-	byte i_c = 0;
+	int i_c = 0;
 	do
 	:: i_c < 2 -> {
 		if
@@ -481,12 +477,12 @@ inline isAllCarsInTheirPos() {
 }
 
 active proctype runTask() {
-        /* Initialize trainsCarsStacks array */
-        /* was int */
-	byte i_run = 0;
+	/* Initialize trainsCarsStacks array */
+	/* was int */
+	int i_run = 0;
         do
         :: i_run < 2 -> {
-                byte j_run = 0;
+                int j_run = 0;
                 do 
                 :: j_run < INIT_CARS_FOR_ONE_TRAIN -> {
                                 trainsCarsStacks[MAX_CARS_FOR_ONE_TRAIN * i_run + j_run] = i_run + 1;
