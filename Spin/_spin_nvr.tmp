@@ -1,0 +1,9 @@
+never solution {    /* !(! (<> ((isTrainFixed[0]) && (isTrainFixed[1])))) */
+T0_init:
+	do
+	:: atomic { (((isTrainFixed[0]) && (isTrainFixed[1]))) -> assert(!(((isTrainFixed[0]) && (isTrainFixed[1])))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}
