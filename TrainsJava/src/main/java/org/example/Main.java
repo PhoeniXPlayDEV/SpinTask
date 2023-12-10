@@ -70,6 +70,8 @@ public class Main {
                     }
 
                     case "locsStatus" -> showLocsStatus();
+
+                    default -> System.out.println("Введена несуществующая команда!");
                 }
 
                 if(isTaskSolved()) {
