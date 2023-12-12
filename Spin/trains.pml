@@ -67,8 +67,7 @@ inline connectOneCar_T(trainID, loc, dir, pos, isReverse) {
 	byte carType_2;
 	/* was int */
 	byte oldCarsNumInLoc_1 = carsInLocs[loc * 2 + dir_crt];
-
-	/* was int */
+	
 	int tmp = loc * MAX_CARS_FOR_ONE_TRAIN + dir_crt * MAX_CARS_IN_ONE_SIDE;
 	int carsLocsStacks_idx_2 = tmp + oldCarsNumInLoc_1 - 1;
 
@@ -80,7 +79,6 @@ inline connectOneCar_T(trainID, loc, dir, pos, isReverse) {
 	if
 	:: isReverse -> { 
 		carType_2 = carsLocsStacks[tmp];
-		/* was int */
 		int k = 1;
 		do
 		:: if 
@@ -116,7 +114,6 @@ inline connectOneCar_T(trainID, loc, dir, pos, isReverse) {
 #define canConnectCars(trainID, dir, n) carsInLocs[trainsLocs[trainID] * 2 + dir] >= n
 
 inline disconnectCars_U(trainID, loc, dir, pos, m) {
-	/* was int */
 	int i_dc = 0;
 	do
 	:: i_dc < m -> {
@@ -128,7 +125,6 @@ inline disconnectCars_U(trainID, loc, dir, pos, m) {
 }
 
 inline connectCars_U(trainID, loc, dir, pos, m, isReverse) {
-	/* was int */
 	int i_cc = 0;
 	do
 	:: i_cc < m -> {
@@ -478,7 +474,6 @@ inline isAllCarsInTheirPos() {
 
 active proctype runTask() {
 	/* Initialize trainsCarsStacks array */
-	/* was int */
 	int i_run = 0;
         do
         :: i_run < 2 -> {
